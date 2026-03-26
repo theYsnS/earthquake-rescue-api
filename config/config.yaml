@@ -1,0 +1,57 @@
+# Earthquake Rescue Coordination System - Configuration
+# =====================================================
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  debug: true
+  workers: 4
+
+database:
+  url: "sqlite:///./rescue_coordination.db"
+  echo: false
+
+mqtt:
+  broker_host: "localhost"
+  broker_port: 1883
+  keepalive: 60
+  client_id: "rescue-api-server"
+  topics:
+    - "sensors/+/vibration"
+    - "sensors/+/sound"
+    - "sensors/+/gas"
+    - "sensors/+/status"
+
+alerts:
+  thresholds:
+    gas_co_warning: 35         # ppm
+    gas_co_critical: 100       # ppm
+    gas_methane_warning: 1000  # ppm
+    gas_methane_critical: 5000 # ppm
+    vibration_warning: 4.0     # mm/s
+    vibration_critical: 10.0   # mm/s
+    sound_warning: 60          # dB
+    sound_critical: 85         # dB
+
+notifications:
+  push_enabled: true
+  sms_enabled: true
+  sms_gateway_url: "https://sms-gateway.example.com/api/send"
+  retry_attempts: 3
+  retry_delay_seconds: 5
+
+coordination:
+  max_assignment_distance_km: 50
+  priority_recalculation_interval_seconds: 300
+  auto_assign_enabled: true
+  severity_weights:
+    critical: 10
+    high: 7
+    medium: 4
+    low: 1
+  time_weight_per_hour: 0.5
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/rescue_api.log"
